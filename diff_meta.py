@@ -23,7 +23,7 @@ def main():
     for file in right_files:
         with open(file) as f:
             print(file)
-            r1 = subprocess.check_output([racket_path, "meta.rkt", str(file)])
+            r1 = subprocess.check_output([racket_path, "meta.ss", str(file)])
             r1 = decode(r1)
             print("r1 is ", r1)
             r2 = subprocess.check_output([racket_path, str(file)])
