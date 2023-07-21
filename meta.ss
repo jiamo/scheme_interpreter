@@ -33,6 +33,7 @@
           ((or? exp) (seval-or exp environ))
           ((cond? exp) (seval-cond exp environ))
           ((let? exp) (seval-let exp environ))
+          ((let*? exp) (seval-let* exp environ))
           ((lambda? exp) (seval-lambda exp environ))
           ((set!? exp) (seval-set! exp environ))
           ((while? exp) (seval-while exp environ))
@@ -224,6 +225,25 @@
   ;;(seval-let-use-lambda exp environ)
   (seval-let-use-begin exp environ)
   )     
+
+(define (let*? exp)
+  (and (pair? exp) (eq? (car exp) 'let*)))
+
+(define (let*-bindings exp)
+  (cadr exp))
+
+(define (let*-body exp)
+  (cddr exp))
+
+
+(define (seval-let* exp environ)
+  (define (let*-to-nested-let bindings body)
+    (if (null? bindings)
+        `(begin ,@body)
+        `(let (,(car bindings)) ,(let*-to-nested-let (cdr bindings) body))))
+  ;(display `(let (,(car (let*-bindings exp))) ,(let*-to-nested-let (cdr (let*-bindings exp)) (let*-body exp))))
+  (seval (let*-to-nested-let (let*-bindings exp) (let*-body exp)) environ))
+
 
 (define (seval-if exp environ)
   (if (seval (if-test exp) environ)
