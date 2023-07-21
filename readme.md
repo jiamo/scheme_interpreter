@@ -8,7 +8,7 @@ If you are going to take the course. You may want to check it.
     raco pkg install while-loop
 
 ## run and compare different interpreter
-    python diff.py
+    python diff_env.py
     python diff_substitue.py
     python diff_meta.py
 
@@ -23,4 +23,4 @@ If you are going to take the course. You may want to check it.
  
 
 ## TODO
-[x] python interpreter don't support multi args in define
+- [x] python interpreter don't support multi args in define

@@ -1,3 +1,6 @@
+import operator as op
+from functools import reduce
+
 Symbol = str              # A Scheme Symbol is implemented as a Python str
 Number = (int, float)     # A Scheme Number is implemented as a Python int or float
 Atom   = (Symbol, Number) # A Scheme Atom is a Symbol or Number
@@ -57,3 +60,44 @@ def decode(r):
     else:
         r = int(r)
     return r
+
+
+
+def multi_args_f(f):
+    def inner(*args):
+        return reduce(f, args)
+    return inner
+
+builtins = {
+    '+': multi_args_f(op.add),
+    '-': op.sub,
+    '*': op.mul,
+    '/': op.truediv,
+    '>': op.gt,
+    '<': op.lt,
+    '>=': op.ge,
+    '<=': op.le,
+    '=': op.eq,
+    'abs': abs,
+    'append': op.add,
+    'begin': lambda *x: x[-1],
+    'car': lambda x: x[0],
+    'cdr': lambda x: x[1:],
+    'cons': lambda x, y: [x] + y,
+    'eq?': op.is_,
+    'equal?': op.eq,
+    'length': len,
+    'list': lambda *x: list(x),
+    'list?': lambda x: isinstance(x, list),
+    'map': map,
+    'max': max,
+    'min': min,
+    'not': op.not_,
+    'null?': lambda x: x == [],
+    'number?': lambda x: isinstance(x, Number),
+    'procedure?': callable,
+    'round': round,
+    'symbol?': lambda x: isinstance(x, Symbol),
+    '#t': True,
+    '#f': False,
+    }
