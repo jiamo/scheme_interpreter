@@ -5,7 +5,6 @@ fact = ('define', 'fact',
                             1,
                             ('*', 'n', ('fact', ('-', 'n', 1))))))
 
-
 Symbol = str              # A Scheme Symbol is implemented as a Python str
 Number = (int, float)     # A Scheme Number is implemented as a Python int or float
 Atom   = (Symbol, Number) # A Scheme Atom is a Symbol or Number
@@ -141,7 +140,7 @@ def seval(sexp, environ):
             if test:                  # Only one branch evaluates
                 return seval(sexp[2], environ)
             else:
-                return seval(sexp[3], environ)
+                return seval(sexp[3], environ)                        
         if  sexp[0] == 'cond':
             for exp in sexp[1:]:
                 test_expr = exp[0]
@@ -149,7 +148,6 @@ def seval(sexp, environ):
                     return seval(exp[1], environ)
                 else:
                     continue
-
         if sexp[0] == 'begin':
             for exp in sexp[1:]:
                 result = seval(exp, environ)
@@ -165,7 +163,7 @@ def seval(sexp, environ):
 
             names = [b[0] for b in sexp[1]]
             values = [b[1] for b in sexp[1]]
-            print( sexp[2:])
+            # print( sexp[2:])
             return seval((('lambda', tuple(names), ('begin', ) + sexp[2:]), *values), environ)
 
         if sexp[0] == 'lambda':
@@ -200,3 +198,18 @@ def seval(sexp, environ):
 
         # 3. Execute the procedure.
         return proc(*args)
+
+if __name__ == "__main__":
+    # run file
+    import sys
+    env =  (builtins, {})
+    with open(sys.argv[1], "r") as f:
+        lines = f.readlines()
+        for line in lines:
+            if line.startswith("#") or line.startswith(";") or line.startswith("(require"):
+                continue
+            x = translate(line)
+            print(x)
+            r1 = seval(x, env)
+        
+    print(r1)

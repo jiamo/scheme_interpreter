@@ -1,21 +1,24 @@
 from scheme_subtitue import seval, translate , builtins
 import subprocess
-
 import pathlib
 import sys
+import scheme_subtitue
+
 right_program_path = pathlib.Path(__file__).resolve().parent
 right_files = list(right_program_path.glob("tests/*.ss"))
 
-racket_path = "/Applications/Racket v8.5/bin/racket"
+racket_path = "racket"
 
 
 def main():
     for file in right_files:
         print(file)
+        # need clean....
+        scheme_subtitue.clean_env()
         with open(file) as f:
             lines = f.readlines()
             for line in lines:
-                if line.startswith("#") or line.startswith(";"):
+                if line.startswith("#") or line.startswith(";") or line.startswith("(require"):
                     continue
                 r1 = seval(translate(line))
 

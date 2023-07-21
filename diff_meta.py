@@ -6,7 +6,7 @@ import sys
 right_program_path = pathlib.Path(__file__).resolve().parent
 right_files = list(right_program_path.glob("tests/*.ss"))
 
-racket_path = "/Applications/Racket v8.5/bin/racket"
+racket_path = "racket"
 
 def decode(r):
     r = r.decode().strip("\n")

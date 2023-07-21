@@ -90,6 +90,10 @@ builtins = {
 
 env = { }
 
+def clean_env():
+    global env
+    env = {}
+
 def isprimitive(sexp):
     return isinstance(sexp, int) or isinstance(sexp, float)
 
@@ -157,7 +161,6 @@ def seval(sexp):
                 r = seval(exp)
             return r
 
-            return procedure(value)
         if sexp[0] == 'lambda':
             def procedure(*args):
                 argnames = sexp[1]
@@ -172,6 +175,7 @@ def seval(sexp):
         args = []
         for arg in sexp[1:]:
             args.append(seval(arg))
+        # print(f"{proc=}")
         return proc(*args)
 
 
@@ -180,5 +184,10 @@ if __name__ == "__main__":
     # run file
     import sys
     with open(sys.argv[1], "r") as f:
-        s = f.read()
-        print(seval(translate(s)))
+        lines = f.readlines()
+        for line in lines:
+            if line.startswith("#") or line.startswith(";") or line.startswith("(require"):
+                continue
+            r1 = seval(translate(line))
+        
+    print(r1)

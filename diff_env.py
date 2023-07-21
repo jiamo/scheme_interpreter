@@ -6,7 +6,8 @@ import sys
 right_program_path = pathlib.Path(__file__).resolve().parent
 right_files = list(right_program_path.glob("tests/*.ss"))
 
-racket_path = "/Applications/Racket v8.5/bin/racket"
+skip = [""]
+racket_path = "racket"
 
 # for simple one line
 def main():
@@ -16,7 +17,7 @@ def main():
             environ = (builtins, {})
             lines = f.readlines()
             for line in lines:
-                if line.startswith("#") or line.startswith(";"):
+                if line.startswith("#") or line.startswith(";") or line.startswith("(require"):
                     continue
                 s = translate(line)
                 print(s)

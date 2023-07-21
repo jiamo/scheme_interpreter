@@ -52,7 +52,7 @@
 (define (define? exp)
   (and (pair? exp) (eq? (car exp) 'define)))
 
-;; suppport (definef (f x ) (+ x 1))
+;; suppport (define (f x) (+ x 1))
 (define (define-name exp)
   (if (pair? (cadr exp))
    (caadr exp)
@@ -322,7 +322,7 @@
 ;(seval file-content)
 
 (define (ignore-#lang str)
-  (if (or (string-prefix? str "#lang") (string-prefix? str ";"))
+  (if (or (string-prefix? str "#lang") (string-prefix? str ";") (string-prefix? str "(require"))
         'ignore
         (with-input-from-string str read)))
 
