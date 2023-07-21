@@ -1,4 +1,5 @@
 from scheme_subtitue import seval, translate , builtins
+from util import decode
 import subprocess
 import pathlib
 import sys
@@ -24,13 +25,7 @@ def main():
 
             print("r1 is ", r1)
             r2 = subprocess.check_output([racket_path, str(file)])
-            r2 = r2.decode().strip("\n")
-            if r2 == "#t":
-                r2 = True
-            elif r2 == "#f":
-                r2 = False
-            else:
-                r2 = int(r2)
+            r2 = decode(r2)
             print("r2 is ", r2)
             assert  r1 == r2
 

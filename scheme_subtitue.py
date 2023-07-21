@@ -141,7 +141,7 @@ def seval(sexp):
                 return seval(sexp[2])
             else:
                 return seval(sexp[3])
-        if  sexp[0] == 'cond':
+        if sexp[0] == 'cond':
             for exp in sexp[1:]:
                 test_expr = exp[0]
                 if test_expr == 'else' or seval(test_expr):
@@ -153,11 +153,12 @@ def seval(sexp):
                 r = seval(e)
             return r
         if sexp[0] == 'let':
-            name = sexp[1][0][0]
-            value = seval(sexp[1][0][1])
+            names = [b[0] for b in sexp[1]]
+            values = [b[1] for b in sexp[1]]
 
             for exp in sexp[2:]:
-                exp = substitute(exp, name, value)
+                for name, value in zip(names, values):
+                    exp = substitute(exp, name, value)
                 r = seval(exp)
             return r
 

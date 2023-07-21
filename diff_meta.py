@@ -1,26 +1,16 @@
 
 import subprocess
-
 import pathlib
+from util import decode
 import sys
 right_program_path = pathlib.Path(__file__).resolve().parent
 right_files = list(right_program_path.glob("tests/*.ss"))
-
+advance_tests = list(right_program_path.glob("advance_tests/*.ss"))
 racket_path = "racket"
-
-def decode(r):
-    r = r.decode().strip("\n")
-    if r == "#t":
-        r = True
-    elif r == "#f":
-        r = False
-    else:
-        r = int(r)
-    return r
 
 # for simple one line
 def main():
-    for file in right_files:
+    for file in right_files + advance_tests:
         with open(file) as f:
             print(file)
             r1 = subprocess.check_output([racket_path, "meta.ss", str(file)])

@@ -6,7 +6,6 @@ import sys
 right_program_path = pathlib.Path(__file__).resolve().parent
 right_files = list(right_program_path.glob("tests/*.ss"))
 
-skip = [""]
 racket_path = "racket"
 
 # for simple one line
