@@ -323,14 +323,22 @@
 
 (define (ignore-#lang str)
   (if (or (string-prefix? str "#lang") (string-prefix? str ";") (string-prefix? str "(require"))
-        'ignore
-        (with-input-from-string str read)))
+        ""
+        str))
+
+
+(define (read-all str)
+  (let ((input (open-input-string str)))
+    (let loop ((sexps '()))
+      (let ((sexp (read input)))
+        (if (eof-object? sexp)
+            (reverse sexps)
+            (loop (cons sexp sexps)))))))
 
 (define (strings->sexps strings)
-  (filter
-    (lambda (x) (not (eq? x 'ignore)))
-    (map ignore-#lang strings)))
-
+  (let* ((filtered-strings (map ignore-#lang strings))
+        (concatenated (string-join filtered-strings "\n")))
+    (read-all concatenated)))
 
 (define args (current-command-line-arguments))
 (define filename (vector-ref args 0))
@@ -340,6 +348,8 @@
 
 
 (define sexps (strings->sexps lst))
+;;(display sexps)
 (define wrapped-sexps (cons 'begin sexps))
+;;(display wrapped-sexps)
 (r3 wrapped-sexps)
 
